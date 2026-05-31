@@ -6,6 +6,7 @@ class Nomnom < Formula
 
   on_macos do
     depends_on "libffi"
+    depends_on "mupdf"
 
     on_arm do
       url "https://github.com/Vein05/nomnom/releases/download/v#{version}/nomnom-darwin-arm64.zip"
@@ -43,13 +44,13 @@ class Nomnom < Formula
 
   def caveats
     <<~EOS
-      PDF/DOCX support requires MuPDF 1.24.x. Homebrew's current mupdf (1.27.x) is
-      incompatible with this release. PDF processing will show warnings but the CLI
-      still works for all other file types. This will be fixed in the next release.
+      PDF/DOCX support requires MuPDF 1.24.x. Homebrew's current mupdf is newer
+      and incompatible, so PDF processing will show warnings on stderr. All other
+      file types work normally. This will be fixed in the next release.
     EOS
   end
 
   test do
-    assert_match "Usage", shell_output("#{bin}/nomnom --help")
+    assert_match "Usage", shell_output("#{bin}/nomnom --help 2>/dev/null")
   end
 end
